@@ -1,5 +1,5 @@
 {
-    "name": "wyw/think-permission",
+    "name": "wyw/permission",
     "description": "rbac",
     "type": "library",
     "require": {
