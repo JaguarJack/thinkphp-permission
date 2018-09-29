@@ -5,6 +5,7 @@
     "require": {
         "topthink/think-migration": "^2.0"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "think\\permissions\\":"src/"
