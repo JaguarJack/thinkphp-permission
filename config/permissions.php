@@ -16,6 +16,8 @@ return [
 	'model' => [
 		'permission' => think\permissions\model\Permissions::class,
 		'role'		 => think\permissions\model\Roles::class,
+		// Must set User Model Class
+		'user'		 => '',
 	],
 
 	// Login User Session Key
