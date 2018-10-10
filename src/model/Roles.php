@@ -18,7 +18,12 @@ class Roles extends Model
 
 	public function permissions()
 	{
-		return $this->belongsToMany(config('permission.model.permission'), config('permission.table.role_has_permissions'), 'permission_id', 'role_id');
+		return $this->belongsToMany(config('permissions.model.permission'), config('permissions.table.role_has_permissions'), 'permission_id', 'role_id');
+	}
+
+	public function users()
+	{
+		return $this->belongsToMany(config('permissions.model.user'), 'user_has_roles', 'uid', 'role_id');
 	}
 
 	/**
@@ -30,7 +35,7 @@ class Roles extends Model
 	 */
 	public function getRoleBy($role_id)
 	{
-		return self::get($role_id);
+		return $this->where('id', $role_id)->find();
 	}
 
 	/**
@@ -40,9 +45,9 @@ class Roles extends Model
 	 * @param $role_id
 	 * @return mixed
 	 */
-	public function getPermissions($role_id, $full = true)
+	public function getPermissions($full = true)
 	{
-		return $full ? $this->getRoleBy($role_id)->permissions : $this->getRoleBy($role_id)->permissions()->column('permission_id');
+		return $full ? $this->permissions : $this->permissions()->column('permission_id');
 	}
 
 
@@ -56,7 +61,7 @@ class Roles extends Model
 	 */
 	public function attachPermissions($roles_id, $permissions = null)
 	{
-		return $this->getRoleBy($roles_id)->attach($permissions);
+		return $this->getRoleBy($roles_id)->permissions()->attach($permissions);
 	}
 
 	/**
@@ -69,9 +74,22 @@ class Roles extends Model
 	 */
 	public function detachPermissions($role_id, $permissions = null)
 	{
-		return $this->getRoleBy($role_id)->detach($permissions);
+
+		return $this->getRoleBy($role_id)->permissions()->detach($permissions);
 	}
 
+	/**
+	 * Detach Users of Role
+	 *
+	 * @author wuyanwen <wuyanwen1992@gmail.com> at 2018年10月02日 22:02
+	 * @param $id
+	 * @param null $users
+	 * @return mixed
+	 */
+	public function detachUsers($id, $users = null)
+	{
+		return $this->getRoleBy($id)->users()->detach($users);
+	}
 	/**
 	 * Delete Role
 	 *

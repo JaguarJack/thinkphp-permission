@@ -17,6 +17,17 @@ class Permissions extends Model
 	}
 
 	/**
+	 * 关联权限
+	 *
+	 * @time at 2018年09月21日
+	 * @return \think\model\relation\BelongsToMany
+	 */
+	public function roles()
+	{
+		return $this->belongsToMany(config('permissions.table.permissions'), 'role_has_permissions', 'role_id', 'permission_id');
+	}
+
+	/**
 	 * find by permission by id
 	 *
 	 * @author wuyanwen <wuyanwen1992@gmail.com> at 2018年09月28日 23:27
@@ -83,5 +94,17 @@ class Permissions extends Model
 			'controller' => $controller,
 			'action'     => $action,
 		])->find();
+	}
+
+	/**
+	 * 删除 权限相关的角色
+	 *
+	 * @author wuyanwen <wuyanwen1992@gmail.com> at 2018年10月02日 22:01
+	 * @param $permission_id
+	 * @return int
+	 */
+	public function detachRole($permission_id)
+	{
+		return $this->getPermissionBy($permission_id)->roles()->detach();
 	}
 }

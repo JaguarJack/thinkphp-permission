@@ -7,16 +7,19 @@
  */
 
 namespace think\permissions;
+use traits\controller\Jump;
 
 class PermissionMiddleware
 {
+	use Jump;
+
 	public function handle($request, \Closure $next)
 	{
 		$controller = $request->controller();
 		$action     = $request->action();
 
-		if (!can(sprintf('%s@%s', $controller, $action))) {
-			return $request->isAjax() ?  json(['message' => '没有权限访问'])->code(403) : abort(403, '没有权限访问');
+		if (!can(strtolower(sprintf('%s@%s', $controller, $action)))) {
+			$this->error('没有权限操作');
 		}
 
 		return $next($request);

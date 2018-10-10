@@ -7,11 +7,11 @@
 
 namespace think\permissions\traits;
 
-trait hasRoles
+trait HasRoles
 {
 	public function roles()
 	{
-		return $this->belongsToMany(config('permission.model.role'), config('permission.table.user_has_roles'), 'role_id', 'uid');
+		return $this->belongsToMany(config('permissions.model.role'), config('permissions.table.user_has_roles'), 'role_id', 'uid');
 	}
 
 	/**
@@ -32,9 +32,9 @@ trait hasRoles
 	 * @param null $roles
 	 * @return mixed
 	 */
-	public function detachRoles($roles = null)
+	public function detachRoles($user_id, $roles = null)
 	{
-		return $this->roles()->detach($roles);
+		return self::get($user_id)->roles()->detach($roles);
 	}
 
 	/**
@@ -44,8 +44,8 @@ trait hasRoles
 	 * @param null $roles
 	 * @return mixed
 	 */
-	public function attachRoles($roles = null)
+	public function attachRoles($user_id, $roles = null)
 	{
-		return $this->roles()->attach($roles);
+		return self::get($user_id)->roles()->attach($roles);
 	}
 }

@@ -21,18 +21,19 @@ if (!function_exists('can')) {
 	{
 		$module = request()->module();
 		list($controller, $action) = explode('@', $permission);
-		$user = request()->session('config.permission.user');
+		$user = request()->session(config('permissions.user'));
 		$roleIDs = $user->getRoles(false);
 		$permission = Permissions::getPermissionByModuleAnd($module, $controller, $action);
+		if (!$permission) {
+			return false;
+		}
 		$permissions = [];
 		foreach ($roleIDs as $role) {
-			$permissions = array_merge($permissions, (Roles::getPermissions($role, false)));
+			$permissions = array_merge($permissions, (Roles::getRoleBy($role)->getPermissions(false)));
 		}
-
 		if (!in_array($permission->id, $permissions)) {
 			return false;
 		}
-
 		return true;
 	}
 }
