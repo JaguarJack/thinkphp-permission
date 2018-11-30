@@ -24,7 +24,7 @@ class Permissions extends Model
 	 */
 	public function roles()
 	{
-		return $this->belongsToMany(config('permissions.table.permissions'), 'role_has_permissions', 'role_id', 'permission_id');
+		return $this->belongsToMany(config('permissions.table.permission'), 'role_has_permissions', 'role_id', 'permission_id');
 	}
 
 	/**
